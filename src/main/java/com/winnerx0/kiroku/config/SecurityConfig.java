@@ -18,11 +18,13 @@ public class SecurityConfig {
     private final CustomUserDetailsService userDetailsService;
     private final JwtFilter jwtFilter;
     private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+    private final RestAccessDeniedHandler restAccessDeniedHandler;
 
-    public SecurityConfig(CustomUserDetailsService userDetailsService, JwtFilter jwtFilter, RestAuthenticationEntryPoint restAuthenticationEntryPoint){
+    public SecurityConfig(CustomUserDetailsService userDetailsService, JwtFilter jwtFilter, RestAuthenticationEntryPoint restAuthenticationEntryPoint, RestAccessDeniedHandler restAccessDeniedHandler){
         this.userDetailsService = userDetailsService;
         this.jwtFilter = jwtFilter;
         this.restAuthenticationEntryPoint = restAuthenticationEntryPoint;
+        this.restAccessDeniedHandler = restAccessDeniedHandler;
     }
 
 
@@ -39,7 +41,10 @@ public class SecurityConfig {
                                 .authenticated()
                 )
                 .userDetailsService(userDetailsService)
-                .exceptionHandling(ex -> ex.authenticationEntryPoint(restAuthenticationEntryPoint))
+                .exceptionHandling(ex -> {
+                    ex.authenticationEntryPoint(restAuthenticationEntryPoint);
+                    ex.accessDeniedHandler(restAccessDeniedHandler);
+                })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
