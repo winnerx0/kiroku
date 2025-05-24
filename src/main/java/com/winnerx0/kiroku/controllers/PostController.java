@@ -3,8 +3,10 @@ package com.winnerx0.kiroku.controllers;
 import com.winnerx0.kiroku.dto.PostDTO;
 import com.winnerx0.kiroku.exceptions.NoDataFoundException;
 import com.winnerx0.kiroku.models.Post;
+import com.winnerx0.kiroku.responses.ErrorResponse;
 import com.winnerx0.kiroku.services.PostService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +29,7 @@ public class PostController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Post> createPost(@Valid @ModelAttribute PostDTO postDTO) throws IOException {
+    public ResponseEntity<Post> createPost(@Valid @ModelAttribute PostDTO postDTO) throws IOException, IllegalArgumentException {
         return ResponseEntity.ok(postService.createPost(postDTO));
     }
 

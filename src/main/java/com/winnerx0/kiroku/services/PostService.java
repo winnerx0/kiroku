@@ -34,7 +34,11 @@ public class PostService {
         return postRepository.findAllUserPosts(user.getId());
     }
 
-    public Post createPost(PostDTO postDTO) throws IOException {
+    public Post createPost(PostDTO postDTO) throws IOException, IllegalArgumentException {
+
+        if(postDTO.file().getBytes().length > 10485760){
+            throw new IllegalArgumentException("File must be at most 10mb");
+        }
         Map params1 = ObjectUtils.asMap(
                 "use_filename", true,
                 "unique_filename", false,

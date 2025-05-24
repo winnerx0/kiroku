@@ -17,9 +17,12 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
     private final JwtFilter jwtFilter;
-    public SecurityConfig(CustomUserDetailsService userDetailsService, JwtFilter jwtFilter){
+    private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+
+    public SecurityConfig(CustomUserDetailsService userDetailsService, JwtFilter jwtFilter, RestAuthenticationEntryPoint restAuthenticationEntryPoint){
         this.userDetailsService = userDetailsService;
         this.jwtFilter = jwtFilter;
+        this.restAuthenticationEntryPoint = restAuthenticationEntryPoint;
     }
 
 
@@ -36,6 +39,7 @@ public class SecurityConfig {
                                 .authenticated()
                 )
                 .userDetailsService(userDetailsService)
+                .exceptionHandling(ex -> ex.authenticationEntryPoint(restAuthenticationEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
