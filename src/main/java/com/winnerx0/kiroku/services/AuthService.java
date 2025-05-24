@@ -2,13 +2,11 @@ package com.winnerx0.kiroku.services;
 
 import com.winnerx0.kiroku.dto.LoginDTO;
 import com.winnerx0.kiroku.dto.RegisterDTO;
-import com.winnerx0.kiroku.exceptions.NoUserFoundException;
+import com.winnerx0.kiroku.exceptions.NoDataFoundException;
 import com.winnerx0.kiroku.models.User;
 import com.winnerx0.kiroku.repositories.UserRepository;
-import jakarta.validation.Valid;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -42,13 +40,14 @@ public class AuthService {
         return jwtService.generateToken(user.getUsername());
     }
 
-    public String login(LoginDTO loginDTO) throws NoUserFoundException {
+    public String login(LoginDTO loginDTO) throws NoDataFoundException {
         try {
             authenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.username(), loginDTO.password())).getName();
 
             return jwtService.generateToken(loginDTO.username());
         } catch (AuthenticationException e){
-            throw new NoUserFoundException("No User Found");
+            throw new NoDataFoundException("No User Found");
         }
     }
+
 }

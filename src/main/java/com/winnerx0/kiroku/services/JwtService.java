@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.function.Function;
 
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.Claims;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -38,7 +39,7 @@ public class JwtService {
     private String buildToken(String username){
         return Jwts
                 .builder()
-                .signWith(getSigningKey())
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
                 .setIssuedAt(new Date())
                 .setSubject(username)
