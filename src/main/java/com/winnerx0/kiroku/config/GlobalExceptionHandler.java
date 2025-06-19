@@ -2,6 +2,8 @@ package com.winnerx0.kiroku.config;
 
 import com.winnerx0.kiroku.exceptions.NoDataFoundException;
 import com.winnerx0.kiroku.responses.ErrorResponse;
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,13 +34,21 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(errorMessage));
     }
 
-    @ExceptionHandler(NoDataFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNoUserFoundException(NoDataFoundException e){
+    @ExceptionHandler({
+            EntityNotFoundException.class,
+            NoDataFoundException.class
+    })
+    public ResponseEntity<ErrorResponse> handleNotFoundException(RuntimeException e){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(e.getMessage()));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(EntityExistsException.class)
+    public ResponseEntity<ErrorResponse> handleEntityExistsException(EntityExistsException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(ex.getMessage()));
     }
 

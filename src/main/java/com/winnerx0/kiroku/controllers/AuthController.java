@@ -1,7 +1,7 @@
 package com.winnerx0.kiroku.controllers;
 
-import com.winnerx0.kiroku.dto.LoginDTO;
-import com.winnerx0.kiroku.dto.RegisterDTO;
+import com.winnerx0.kiroku.dto.LoginRequestDTO;
+import com.winnerx0.kiroku.dto.RegisterRequestDTO;
 import com.winnerx0.kiroku.exceptions.NoDataFoundException;
 import com.winnerx0.kiroku.responses.AuthResponse;
 import com.winnerx0.kiroku.services.AuthService;
@@ -20,14 +20,14 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterDTO registerDTO){
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequestDTO registerDTO){
         String token = authService.register(registerDTO);
         AuthResponse response = new AuthResponse("Success", token);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginDTO loginDTO) throws NoDataFoundException {
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequestDTO loginDTO) {
         String token = authService.login(loginDTO);
         AuthResponse response = new AuthResponse("Success", token);
         return ResponseEntity.ok(response);

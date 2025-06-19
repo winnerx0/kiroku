@@ -10,8 +10,7 @@ import java.util.Date;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor(force = true)
-@RequiredArgsConstructor
+@NoArgsConstructor
 @AllArgsConstructor
 public class Post {
 
@@ -19,14 +18,17 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    private final String title;
+    private String title;
 
-    private final String image;
+    private String image;
 
     private LocalDate createdAt = LocalDate.now();
 
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIncludeProperties("username")
-    private final User user;
+    @JsonIncludeProperties("name")
+    private User user;
 }
