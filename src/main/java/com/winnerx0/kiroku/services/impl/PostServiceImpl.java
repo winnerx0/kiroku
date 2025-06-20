@@ -7,7 +7,6 @@ import com.winnerx0.kiroku.exceptions.NoDataFoundException;
 import com.winnerx0.kiroku.models.Post;
 import com.winnerx0.kiroku.models.User;
 import com.winnerx0.kiroku.repositories.PostRepository;
-import com.winnerx0.kiroku.services.CustomUserDetailsServiceImpl;
 import com.winnerx0.kiroku.services.PostService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;

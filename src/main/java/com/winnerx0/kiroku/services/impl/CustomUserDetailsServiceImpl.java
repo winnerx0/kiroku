@@ -1,4 +1,4 @@
-package com.winnerx0.kiroku.services;
+package com.winnerx0.kiroku.services.impl;
 
 import com.winnerx0.kiroku.exceptions.NoDataFoundException;
 import com.winnerx0.kiroku.models.User;

@@ -2,6 +2,7 @@ package com.winnerx0.kiroku.config;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.winnerx0.kiroku.exceptions.NoDataFoundException;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +21,7 @@ public class CloudinaryConfig {
         String cloudinaryUrl = dotenv.get("CLOUDINARY_URL");
 
         if (cloudinaryUrl == null) {
-            throw new IllegalStateException("CLOUDINARY_URL environment variable is not set.");
+            throw new NoDataFoundException("CLOUDINARY_URL environment variable is not set.");
         }
         return new Cloudinary(cloudinaryUrl);
     }

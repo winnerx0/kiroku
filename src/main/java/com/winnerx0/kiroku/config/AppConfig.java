@@ -1,6 +1,5 @@
 package com.winnerx0.kiroku.config;
 
-import com.winnerx0.kiroku.services.CustomUserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
