@@ -1,5 +1,6 @@
 package com.winnerx0.kiroku.responses;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.time.LocalTime;
@@ -10,5 +11,4 @@ import java.time.LocalTime;
 public class ErrorResponse {
 
     private final String message;
-    private LocalTime timestamp = LocalTime.now();
 }

@@ -1,5 +1,6 @@
 package com.winnerx0.kiroku.responses;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -11,5 +12,4 @@ import java.time.LocalTime;
 public class AuthResponse {
     private final String message;
     private final String token;
-    private LocalTime timestamp = LocalTime.now();
 }
