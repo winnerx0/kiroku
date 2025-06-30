@@ -17,5 +17,7 @@ func NewRouter() *mux.Router {
 
 	router.HandleFunc("/api/post/{id}", handlers.HandleDeletePost).Methods("DELETE")
 
+	router.HandleFunc("/api/post", handlers.HandleGetAllUserPosts).Methods("GET")
+
 	return router
 }

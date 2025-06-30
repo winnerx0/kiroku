@@ -11,6 +11,7 @@ import (
 )
 
 type Post struct {
+	Id     int    `json:"id"`
 	Title  string `json:"title"`
 	Status Status `json:"status"`
 	UserId int    `json:"user_id"`
@@ -95,6 +96,44 @@ func HandleDeletePost(w http.ResponseWriter, r *http.Request) {
 
 	response, _ := json.Marshal(PostResponse{Message: "Deleted successfully"})
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(400)
 	json.NewEncoder(w).Encode(&response)
+}
+
+func HandleGetAllUserPosts(w http.ResponseWriter, r *http.Request) {
+
+	var posts []Post
+
+	database := db.InitDB()
+
+	rows, err := database.Query("SELECT id, title, status, user_id FROM posts")
+
+	defer func() {
+		database.Close()
+		rows.Close()
+	}()
+
+	if err != nil {
+		w.Header().Set("Content-Type", "application/json")
+		errorBytes, _ := json.Marshal(utils.ErrorResponse{Message: err.Error()})
+		w.WriteHeader(400)
+		w.Write(errorBytes)
+		return
+	}
+
+	for rows.Next() {
+		var post Post
+		if err := rows.Scan(&post.Id, &post.Title, &post.Status, &post.UserId); err != nil {
+			w.Header().Set("Content-Type", "application/json")
+			errorBytes, _ := json.Marshal(utils.ErrorResponse{Message: err.Error()})
+			w.WriteHeader(400)
+			w.Write(errorBytes)
+			return
+		}
+		posts = append(posts, post)
+	}
+
+	fmt.Println(posts)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(posts)
+
 }
