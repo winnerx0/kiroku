@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/winnerx0/kiroku/internal/db"
 	"github.com/winnerx0/kiroku/internal/utils"
 )
@@ -31,6 +32,8 @@ func HandleCreatePost(w http.ResponseWriter, r *http.Request) {
 
 	database := db.InitDB()
 
+	defer database.Close()
+
 	var post Post
 
 	err := json.NewDecoder(r.Body).Decode(&post)
@@ -46,9 +49,9 @@ func HandleCreatePost(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		errorBytes, _ := json.Marshal(utils.ErrorResponse{Message: err.Error()})
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		w.Write(errorBytes)
-		w.Header().Set("Content-Type", "application/json")
 		return
 	}
 
@@ -56,4 +59,42 @@ func HandleCreatePost(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(&response)
 
+}
+
+func HandleDeletePost(w http.ResponseWriter, r *http.Request) {
+
+	database := db.InitDB()
+
+	defer database.Close()
+
+	vars := mux.Vars(r)
+
+	postId := vars["id"]
+
+	var post Post
+
+	database.QueryRow("SELECT title FROM posts WHERE id = $1", postId).Scan(&post.Title)
+
+	if post.Title == "" {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(404)
+		response, _ := json.Marshal(PostResponse{Message: "Post not foudn"})
+		w.Write(response)
+		return
+	}
+
+	_, err := database.Exec("DELETE FROM posts WHERE id = $1", postId)
+
+	if err != nil {
+		w.Header().Set("Content-Type", "application/json")
+		errorBytes, _ := json.Marshal(utils.ErrorResponse{Message: err.Error()})
+		w.WriteHeader(400)
+		w.Write(errorBytes)
+		return
+	}
+
+	response, _ := json.Marshal(PostResponse{Message: "Deleted successfully"})
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	json.NewEncoder(w).Encode(&response)
 }

@@ -30,8 +30,9 @@ func HandleRegister(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&registerDTO)
 
 	if err != nil {
-
-		http.Error(w, "Error parsing body ", 400)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(400)
+		w.Write([]byte("Error parsing body"))
 		return
 	}
 
@@ -39,9 +40,9 @@ func HandleRegister(w http.ResponseWriter, r *http.Request) {
 
 	if user.Username != "" {
 		errorBytes, _ := json.Marshal(utils.ErrorResponse{Message: "Username already exists"})
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
 		w.Write(errorBytes)
-		w.Header().Set("Content-Type", "application/json")
 		return
 	}
 
@@ -49,9 +50,9 @@ func HandleRegister(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		errorBytes, _ := json.Marshal(utils.ErrorResponse{Message: err.Error()})
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		w.Write(errorBytes)
-		w.Header().Set("Content-Type", "application/json")
 		return
 	}
 
@@ -59,9 +60,9 @@ func HandleRegister(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		errorBytes, _ := json.Marshal(utils.ErrorResponse{Message: err.Error()})
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		w.Write(errorBytes)
-		w.Header().Set("Content-Type", "application/json")
 		return
 	}
 
@@ -83,9 +84,9 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		errorBytes, _ := json.Marshal(utils.ErrorResponse{Message: err.Error()})
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		w.Write(errorBytes)
-		w.Header().Set("Content-Type", "application/json")
 		return
 	}
 
@@ -95,34 +96,34 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 
 	if user.Username == "" {
 		errorBytes, _ := json.Marshal(utils.ErrorResponse{Message: "User not found"})
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(404)
 		w.Write(errorBytes)
-		w.Header().Set("Content-Type", "application/json")
 		return
 	}
 
 	if loginDTO.Password != user.Password {
 		errorBytes, _ := json.Marshal(utils.ErrorResponse{Message: "Invalid credentials"})
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		w.Write(errorBytes)
-		w.Header().Set("Content-Type", "application/json")
 		return
 	}
 
 	if err != nil {
 		errorBytes, _ := json.Marshal(utils.ErrorResponse{Message: err.Error()})
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		w.Write(errorBytes)
-		w.Header().Set("Content-Type", "application/json")
 	}
 
 	token, err := utils.CreateToken(loginDTO.Username)
 
 	if err != nil {
 		errorBytes, _ := json.Marshal(utils.ErrorResponse{Message: err.Error()})
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		w.Write(errorBytes)
-		w.Header().Set("Content-Type", "application/json")
 	}
 
 	response := TokenResponse{Token: token}

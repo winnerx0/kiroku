@@ -1,20 +1,21 @@
 package api
 
 import (
-	"net/http"
-
+	"github.com/gorilla/mux"
 	"github.com/winnerx0/kiroku/internal/api/handlers"
 )
 
-func NewRouter() *http.ServeMux {
+func NewRouter() *mux.Router {
 
-	mux := http.NewServeMux()
+	router := mux.NewRouter()
 
-	mux.HandleFunc("POST /api/register", handlers.HandleRegister)
+	router.HandleFunc("/api/register", handlers.HandleRegister).Methods("POST")
 
-	mux.HandleFunc("POST /api/login", handlers.HandleLogin)
+	router.HandleFunc("/api/login", handlers.HandleLogin).Methods("POST")
 
-	mux.HandleFunc("POST /api/post", handlers.HandleCreatePost)
+	router.HandleFunc("/api/post", handlers.HandleCreatePost).Methods("POST")
 
-	return mux
+	router.HandleFunc("/api/post/{id}", handlers.HandleDeletePost).Methods("DELETE")
+
+	return router
 }

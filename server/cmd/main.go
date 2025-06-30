@@ -5,12 +5,11 @@ import (
 	"net/http"
 
 	"github.com/winnerx0/kiroku/internal/api"
-	"github.com/winnerx0/kiroku/internal/db"
 )
 
 func main() {
 
-	db.InitDB()
+	// db.InitDB()
 
 	router := api.NewRouter()
 
